@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class MyList<T>{
@@ -10,6 +11,8 @@ public class MyList<T>{
         head = null;
 
     }//costruttore
+
+
 
     /**
      * @param element elemento da aggiungere in coda
@@ -34,6 +37,8 @@ public class MyList<T>{
         curr.setLink(add);
 
     }
+
+
 
     /**
      * @param element elemento da aggiungere alla lista
@@ -62,6 +67,8 @@ public class MyList<T>{
 
     }
 
+
+
     /**
      * @param element elemento da aggiungere all'inizio della lista
      */
@@ -72,6 +79,8 @@ public class MyList<T>{
         head = curr;
 
     }
+
+
 
     /**
      * @param index posizione dell'elemento da ritornare
@@ -94,6 +103,84 @@ public class MyList<T>{
         return (T) curr.getElement();
     }
 
+
+
+    /**
+     * @param index posizione del nodo da ritornare
+     * @return Node - nodo in posizione index
+     * @throws IndexOutOfBoundsException
+     */
+    private Node<T> getNode(int index){
+
+        Node curr = head;
+        int count = 0;
+        while(curr != null && count < index){
+
+            curr= curr.getLink();
+            count++;
+
+        }//while
+
+        if(curr == null) throw new IndexOutOfBoundsException("Elemento non trovato, index maggiore della grandezza");
+
+        return curr;
+    }
+
+
+
+    /**
+     * @return il primo elemento della lista
+     */
+    public T getFirst(){
+
+        return head.getElement();
+
+    }
+
+
+
+    /**
+     * @return l'ultimo elemento della lista
+     */
+    public T getLast(){
+
+        if(head.getLink() == null) return head.getElement();
+
+        Node<T> curr = head;
+
+        while(curr.getLink() != null){
+
+            curr = curr.getLink();
+
+        }//while
+
+        return curr.getElement();
+
+    }
+
+
+
+    /**
+     * @return l'ultimo nodo della lista
+     */
+    private Node<T> getLastNode(){
+
+        if(head.getLink() == null) return head;
+
+        Node<T> curr = head;
+
+        while(curr.getLink() != null){
+
+            curr = curr.getLink();
+
+        }//while
+
+        return curr;
+
+    }
+
+
+
     /**@return int - numero di elementi presenti nella lista
      */
     public int size(){
@@ -110,6 +197,8 @@ public class MyList<T>{
         return size;
     }
 
+
+
     /**
      * rimuove tutti gli elementi della lista
      */
@@ -119,6 +208,8 @@ public class MyList<T>{
 
     }
 
+
+
     /**
      * @return MyList una lista identitca a questa
      */
@@ -127,6 +218,8 @@ public class MyList<T>{
         return this;
 
     }
+
+
 
     /**
      * @param index posizione dell'element da rimuovere
@@ -169,6 +262,8 @@ public class MyList<T>{
 
     }
 
+
+
     /**
      * @param element da rimuovere
      * @return true se l'elemento è stato rimosso
@@ -198,6 +293,36 @@ public class MyList<T>{
 
     }
 
+
+
+    /**
+     * @return true se l'ultimo elemento è stato rimosso
+     */
+    public boolean removeLast(){
+
+        Node<T> prev = null;
+        Node<T> curr = head;
+
+        while(curr != null){
+
+            if(curr.getLink() == null){
+
+                prev.setLink(null);
+                return true;
+
+            }//if
+
+            prev = curr;
+            curr = curr.getLink();
+
+        }//while
+
+        return false;
+
+    }
+
+
+
     /**
      * @return true se la lista è vuota
      */
@@ -207,6 +332,8 @@ public class MyList<T>{
         return false;
 
     }
+
+
 
     /**
      * @param element elemento da verificare
@@ -231,6 +358,8 @@ public class MyList<T>{
         return false;
 
     }
+
+
 
     /**
      * @param element elemento da cercare
@@ -259,6 +388,8 @@ public class MyList<T>{
 
     }
 
+
+
     /**
      * @return la lista trasformata in un array
      */
@@ -280,6 +411,53 @@ public class MyList<T>{
 
     }
 
+
+
+    /**inverte gli elementi della lista, il primo diventa l'ultimo e viceversa
+     */
+    public void reverse(){
+
+        MyList<T> newList = new MyList<>();
+
+        int size = size();
+        for(int i=1;i<size;i++){
+
+            newList.add(get(size-i));
+
+        }//for
+
+        head = newList.head;
+
+
+    }
+
+
+
+    /**
+     * @param firstIndex primo elemento del range da prelevare
+     * @param secondIndex secondo range fino a quale prelevare
+     * @return una sotto lista deglie elementi firstIndex -> secondIndex
+     */
+    public MyList<T> subList(int firstIndex, int secondIndex){
+
+        MyList<T> subList = new MyList<>();
+        Node<T> curr = head;
+
+        int nodeCurr = 0;
+        curr = getNode(firstIndex);
+        while(curr != null && nodeCurr <= secondIndex){
+
+            subList.add(curr.getElement());
+            curr = curr.getLink();
+
+        }//while
+
+        return subList;
+
+    }
+
+
+
     /**
      * @return String tutti i toString() degli element della lista
      */
@@ -298,6 +476,8 @@ public class MyList<T>{
         return content;
 
     }
+
+
 
 
 }
