@@ -1,14 +1,13 @@
-import java.util.ArrayList;
-import java.util.Arrays;
-
 public class MyList<T>{
 
     private Node<T> head;
+    private Node<T> tail;
 
 
     public MyList(){
 
         head = null;
+        tail=null;
 
     }//costruttore
 
@@ -19,11 +18,10 @@ public class MyList<T>{
      */
     public void add(T element){
 
-        Node<T> add = new Node<>(element);
-
         if(head == null){
 
-            head = add;
+            head = new Node<>(element);
+            tail=head;
             return;
 
         }//if
@@ -34,7 +32,11 @@ public class MyList<T>{
             curr = curr.getLink();
 
         }//while
-        curr.setLink(add);
+
+        curr.setLink(new Node<>(element));
+        tail = curr.getLink();
+        tail.setPrev(curr);
+
 
     }
 
@@ -48,20 +50,22 @@ public class MyList<T>{
 
         Node<T> curr = head;
         int pos = 0;
-        while(curr != null && pos < index){
+        while(curr != null && pos < index && curr.getLink() != null){
 
             curr = curr.getLink();
             pos++;
 
         }//while
 
-        if(curr == null) curr = new Node<>(element);
-        if(curr.getLink() == null) curr.setLink(new Node<T>(element));
+        if(curr.getLink() == null){
+
+            curr.setLink(new Node<T>(curr,element));
+            tail = curr.getLink();
+
+        }//if
         if(curr.getLink() != null){
 
-            Node<T> next = curr.getLink();
-            curr.setLink(new Node<T>(element));
-            curr.getLink().setLink(next);
+            curr.setLink(new Node<>(curr,element,curr.getLink()));
 
         }//if
 
@@ -74,7 +78,25 @@ public class MyList<T>{
      */
     public void addFirst(T element){
 
+        if(head==null){
+
+            add(element);
+            return;
+
+        }//if
+
+        if(head.getLink() == null){
+
+            tail = head;
+            head = new Node<>(element);
+            head.setLink(tail);
+            tail.setPrev(head);
+            return;
+
+        }//if
+
         Node<T> curr = new Node<>(element);
+        head.setPrev(curr);
         curr.setLink(head);
         head = curr;
 
@@ -89,7 +111,26 @@ public class MyList<T>{
      */
     public T get(int index){
 
-        Node curr = head;
+        int size = size();
+
+        if((size / 2) <= index){
+
+            int count = 1;
+            int nCicli = size-index;
+            Node<T> curr = tail;
+
+            while(count < nCicli){
+
+                curr = curr.getPrev();
+                count++;
+
+            }//while
+
+            return curr.getElement();
+
+        }//if
+
+        Node<T> curr = head;
         int count = 0;
         while(curr != null && count < index){
 
@@ -112,7 +153,26 @@ public class MyList<T>{
      */
     private Node<T> getNode(int index){
 
-        Node curr = head;
+        int size = size();
+
+        if((size / 2) <= index){
+
+            int count = 1;
+            int nCicli = size-index;
+            Node<T> curr = tail;
+
+            while(count < nCicli){
+
+                curr = curr.getPrev();
+                count++;
+
+            }//while
+
+            return curr;
+
+        }//if
+
+        Node<T> curr = head;
         int count = 0;
         while(curr != null && count < index){
 
@@ -144,17 +204,7 @@ public class MyList<T>{
      */
     public T getLast(){
 
-        if(head.getLink() == null) return head.getElement();
-
-        Node<T> curr = head;
-
-        while(curr.getLink() != null){
-
-            curr = curr.getLink();
-
-        }//while
-
-        return curr.getElement();
+        return tail.getElement();
 
     }
 
@@ -162,20 +212,11 @@ public class MyList<T>{
 
     /**
      * @return l'ultimo nodo della lista
+     * @deprecated
      */
     private Node<T> getLastNode(){
 
-        if(head.getLink() == null) return head;
-
-        Node<T> curr = head;
-
-        while(curr.getLink() != null){
-
-            curr = curr.getLink();
-
-        }//while
-
-        return curr;
+        return tail;
 
     }
 
@@ -205,6 +246,7 @@ public class MyList<T>{
     public void clear(){
 
         head = null;
+        tail = null;
 
     }
 
@@ -228,35 +270,51 @@ public class MyList<T>{
      */
     public boolean remove(int index){
 
-        Node<T> curr = head;
-        int pos = 0;
-        Node<T> prev = head;
-        while(curr != null && pos < index){
+        int size = size();
 
-            prev = curr;
-            curr = curr.getLink();
-            pos++;
+        if(index == 0) head = head.getLink();
+
+        if(size-1 == index){
+
+            tail = tail.getPrev();
+
+        }//if
+
+        if((size / 2) <= index){
+
+            int count = 1;
+            int nCicli = size-index;
+            Node<T> curr = tail;
+
+            while(count < nCicli){
+
+                curr = curr.getPrev();
+                count++;
+
+            }//while
+
+            curr.getPrev().setLink(curr.getLink());
+
+            return true;
+
+        }//if
+
+        Node<T> curr = head;
+        int count = 0;
+        while(curr != null && count < index){
+
+            curr= curr.getLink();
+            count++;
 
         }//while
 
-        if(curr == null && pos < index) {
+        if(curr == null) {
 
             throw new IndexOutOfBoundsException("La lista non ha abbastanza elementi da arrivare al " + index + "° elemento");
 
         }//if
 
-        if(curr.getLink() == null) {
-
-            prev = null;
-
-        }//if
-
-        if(curr.getLink() != null){
-
-            Node<T> temp = curr.getLink();
-            prev.setLink(temp);
-
-        }//if
+        curr.getPrev().setLink(curr.getLink());
 
         return true;
 
@@ -298,26 +356,9 @@ public class MyList<T>{
     /**
      * @return true se l'ultimo elemento è stato rimosso
      */
-    public boolean removeLast(){
+    public void removeLast(){
 
-        Node<T> prev = null;
-        Node<T> curr = head;
-
-        while(curr != null){
-
-            if(curr.getLink() == null){
-
-                prev.setLink(null);
-                return true;
-
-            }//if
-
-            prev = curr;
-            curr = curr.getLink();
-
-        }//while
-
-        return false;
+        tail = tail.getPrev();
 
     }
 
@@ -476,7 +517,6 @@ public class MyList<T>{
         return content;
 
     }
-
 
 
 
