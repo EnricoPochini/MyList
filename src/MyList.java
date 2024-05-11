@@ -48,6 +48,22 @@ public class MyList<T>{
      */
     public void add(T element,int index){
 
+        int size = size();
+
+        if(size == index){
+
+            addLast(element);
+            return;
+
+        }//if
+
+        if(index == 0){
+
+            addFirst(element);
+            return;
+
+        }//if
+
         Node<T> curr = head;
         int pos = 0;
         while(curr != null && pos < index && curr.getLink() != null){
@@ -68,6 +84,28 @@ public class MyList<T>{
             curr.setLink(new Node<>(curr,element,curr.getLink()));
 
         }//if
+
+    }
+
+
+
+    /**
+     * aggiunge un nuovo elemento alla fine
+     * @param element da aggiungere
+     */
+    public void addLast(T element){
+
+        if(isEmpty()){
+
+            add(element);
+            return;
+
+        }//if
+
+        Node<T> prev = tail.getPrev();
+        tail = new Node<>(element);
+        tail.setPrev(prev);
+        prev.setLink(tail);
 
     }
 
@@ -113,6 +151,10 @@ public class MyList<T>{
 
         int size = size();
 
+        if(size-1 == index) return tail.getElement();
+
+        if(index == 0) return head.getElement();
+
         if((size / 2) <= index){
 
             int count = 1;
@@ -154,6 +196,10 @@ public class MyList<T>{
     private Node<T> getNode(int index){
 
         int size = size();
+
+        if(size-1 == index) return tail;
+
+        if(index == 0) return head;
 
         if((size / 2) <= index){
 
