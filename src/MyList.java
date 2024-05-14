@@ -153,7 +153,7 @@ public class MyList<T>{
      */
     public T get(int index){
 
-        if(isEmpty()) throw new IndexOutOfBoundsException("Elemento non trovato, index maggiore della grandezza");
+        if(isEmpty()) throw new IndexOutOfBoundsException("Elemento non trovato, lista vuota");
 
         int size = size();
 
@@ -201,6 +201,8 @@ public class MyList<T>{
      */
     private Node<T> getNode(int index){
 
+        if(isEmpty()) throw new IndexOutOfBoundsException("Elemento non trovato, lista vuota");
+
         int size = size();
 
         if(size-1 == index) return tail;
@@ -245,6 +247,8 @@ public class MyList<T>{
      */
     public T getFirst(){
 
+        if(isEmpty()) throw new IndexOutOfBoundsException("Elemento non trovato, lista vuota");
+
         return head.getElement();
 
     }
@@ -255,6 +259,8 @@ public class MyList<T>{
      * @return l'ultimo elemento della lista
      */
     public T getLast(){
+
+        if(isEmpty()) throw new IndexOutOfBoundsException("Elemento non trovato, lista vuota");
 
         return tail.getElement();
 
@@ -322,6 +328,8 @@ public class MyList<T>{
      */
     public boolean remove(int index){
 
+        if(isEmpty()) throw new IndexOutOfBoundsException("Elemento non trovato, lista vuota");
+
         int size = size();
 
         if(index == 0) head = head.getLink();
@@ -380,6 +388,7 @@ public class MyList<T>{
      * @throws IndexOutOfBoundsException
      */
     public boolean remove(T element){
+
 
         Node<T> prev = null;
         Node<T> curr = head;

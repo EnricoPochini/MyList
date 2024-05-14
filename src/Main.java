@@ -7,14 +7,11 @@ import java.util.List;
 public class Main {
     public static void main(String[] args) throws IOException {
 
+        //region load
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-
         MyList<String> str = new MyList<>();
-
         boolean continua = true;
-
         while (continua) {
-            // Chiedi all'utente di inserire un elemento
             System.out.print("Inserisci un elemento (digita 'fine' per terminare): ");
             String elemento = br.readLine();
 
@@ -24,6 +21,7 @@ public class Main {
                 str.add(elemento);
             }
         }
+        //endregion
 
 
         System.out.println("quale elemento: ");
