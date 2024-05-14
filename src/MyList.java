@@ -1,3 +1,5 @@
+import java.lang.annotation.Documented;
+
 @SuppressWarnings("ALL")
 public class MyList<T>{
 
@@ -19,10 +21,9 @@ public class MyList<T>{
      */
     public void add(T element){
 
-        if(head == null){
+        if(isEmpty()){
 
-            head = new Node<>(element);
-            tail=head;
+            addFirst(element);
             return;
 
         }//if
@@ -49,6 +50,13 @@ public class MyList<T>{
      */
     public void add(T element,int index){
 
+        if(isEmpty() || index == 0){
+
+            addFirst(element);
+            return;
+
+        }//if
+
         int size = size();
 
         if(size == index){
@@ -58,12 +66,6 @@ public class MyList<T>{
 
         }//if
 
-        if(index == 0){
-
-            addFirst(element);
-            return;
-
-        }//if
 
         Node<T> curr = head;
         int pos = 0;
@@ -98,7 +100,7 @@ public class MyList<T>{
 
         if(isEmpty()){
 
-            add(element);
+            addFirst(element);
             return;
 
         }//if
@@ -119,7 +121,8 @@ public class MyList<T>{
 
         if(head==null){
 
-            add(element);
+            head = new Node<>(element);
+            tail = head;
             return;
 
         }//if
@@ -149,6 +152,8 @@ public class MyList<T>{
      * @throws IndexOutOfBoundsException
      */
     public T get(int index){
+
+        if(isEmpty()) throw new IndexOutOfBoundsException("Elemento non trovato, index maggiore della grandezza");
 
         int size = size();
 
@@ -415,10 +420,7 @@ public class MyList<T>{
      * @return true se la lista è vuota
      */
     public boolean isEmpty(){
-
-        if(head == null) return true;
-        return false;
-
+        return head == null;
     }
 
 
@@ -481,10 +483,10 @@ public class MyList<T>{
     /**
      * @return la lista trasformata in un array
      */
-    public Object[] toArray(){
+    public <T> T[] toArray(){
 
         Object[] arr = new Object[size()];
-        Node<T> curr = head;
+        Node<T> curr = (Node<T>) head;
         int currIndex = 0;
 
         while(curr!=null){
@@ -495,7 +497,7 @@ public class MyList<T>{
 
         }//while
 
-        return arr;
+        return (T[]) arr;
 
     }
 
