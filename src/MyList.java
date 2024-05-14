@@ -1,3 +1,4 @@
+@SuppressWarnings("ALL")
 public class MyList<T>{
 
     private Node<T> head;
